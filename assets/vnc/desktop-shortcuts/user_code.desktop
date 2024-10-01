@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=user_code
+Comment=Shortcut to user_code folder
+Exec=thunar /code/catkin_ws/src/user_code
+Icon=folder
+Path=/code/catkin_ws/src/user_code
+Terminal=false
+StartupNotify=false
+

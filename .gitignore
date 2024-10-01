@@ -1,0 +1,4 @@
+# to avoid nested git
+user_code_mount_dir/**
+# to keep the mount point parent folder for user code inside the Docker container
+!user_code_mount_dir/.gitkeep

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>noVNC</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="app/styles/base.css">
+</head>
+<body>
+    <div id="noVNC_container" class="noVNC_container"></div>
+    <script type="module">
+        import RFB from './core/rfb.js';
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const host = urlParams.get('host') || window.location.hostname;
+            const port = urlParams.get('port') || window.location.port;
+            const path = urlParams.get('path') || 'websockify';
+            const password = urlParams.get('password') || 'quackquack';
+
+            const rfb = new RFB(
+                document.getElementById('noVNC_container'),
+                `ws://${host}:${port}/${path}`,
+                {
+                    credentials: { password: password }
+                }
+            );
+
+            rfb.addEventListener('clipboard', event => {
+                const clipboardText = event.detail.text;
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(clipboardText).then(() => {
+                        console.log("Clipboard data received from server: " + clipboardText);
+                    }).catch(err => {
+                        console.error('Could not copy text: ', err);
+                    });
+                } else {
+                    // Fallback for browsers without clipboard API support
+                    const textArea = document.createElement('textarea');
+                    textArea.value = clipboardText;
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        console.log("Clipboard data received from server (fallback): " + clipboardText);
+                    } catch (err) {
+                        console.error('Fallback: Oops, unable to copy', err);
+                    }
+                    document.body.removeChild(textArea);
+                }
+            });
+
+            // Handle paste event to send clipboard data to VNC session
+            document.addEventListener('paste', event => {
+                const clipboardText = event.clipboardData.getData('text');
+                console.log('Paste event detected:', clipboardText);
+                rfb.clipboardPasteFrom(clipboardText);
+            });
+
+            rfb.viewOnly = false;
+            rfb.scaleViewport = true;
+            rfb.resizeSession = true;
+
+            // Resize the VNC screen to the size of the browser window
+            window.addEventListener('resize', () => {
+                rfb.scaleViewport = true;
+                rfb.resizeSession = true;
+            });
+
+            // Check for the canvas element periodically until it's found
+            const focusInterval = setInterval(ensureCanvasFocus, 1000);
+        });
+    </script>
+</body>
+</html>

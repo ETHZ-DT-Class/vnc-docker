@@ -1,0 +1,39 @@
+# common
+pyqtgraph
+PythonQwt
+numpy>=1.22.0,<=1.22.0
+reprep-z6>=6.0.3,<7
+pdfkit
+
+#simulation
+pyglet==1.5.15
+gym>=0.9.0
+pyzmq>=16.0.0
+pyyaml>=3.11
+dataclasses<=0.6; python_version < '3.7'
+carnivalmirror==0.6.2
+pipdeptree
+duckietown-world-daffy
+typing-extensions
+
+# exercise-specific
+
+# ex1
+shapely
+numexpr
+pandas
+
+
+# ex2
+
+
+# ex3
+
+
+# ex 4
+
+
+# ex 5
+
+
+# ex 6

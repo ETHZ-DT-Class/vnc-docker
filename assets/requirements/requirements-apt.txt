@@ -1,0 +1,59 @@
+# common
+xorg-dev
+xfce4
+xfce4-goodies
+x11vnc
+xvfb
+supervisor
+xterm
+terminator
+wget
+curl
+git
+vim
+gedit
+lshw
+mesa-utils
+libgl1-mesa-dri
+autocutsel
+ros-noetic-rqt
+ros-noetic-rqt-common-plugins
+ros-noetic-rviz
+ros-noetic-tf2-tools
+python3-rosbag
+python3-pip
+python3-opencv
+firefox
+wkhtmltopdf
+
+# simulation
+freeglut3-dev
+libglib2.0-0
+libsm6
+libxrender1
+libxext6
+fontconfig
+python3-scipy
+
+
+# exercise-specific
+
+# ex 1
+
+
+# ex 2
+
+
+# ex 3
+libgl1-mesa-dri
+python3-tk
+python3-venv
+
+
+# ex 4
+
+
+# ex 5
+
+
+# ex 6

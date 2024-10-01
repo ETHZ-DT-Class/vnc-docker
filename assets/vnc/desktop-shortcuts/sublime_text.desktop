@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Sublime Text
+Comment=Sublime Text, a high-level text editor
+Exec=/opt/sublime_text/sublime_text %F
+Icon=sublime-text
+Path=
+Terminal=false
+StartupNotify=false
+
