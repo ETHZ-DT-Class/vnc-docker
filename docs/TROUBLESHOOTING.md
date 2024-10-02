@@ -80,7 +80,7 @@ pyglet.canvas.xlib.NoSuchDisplayException: Cannot connect to "None"
 ---
 
 ### - RLException: [`LAUNCH_NAME`.launch] is neither a launch file in package [`PACKAGE_NAME`] nor is [`PACKAGE_NAME`] a launch file name
-When launchiing a launch file (or running the exercise ROS node using `make ex` or `roslaunch exerciseX exerciseX.launch`):
+When launching a launch file (or running the exercise ROS node using `make ex` or `roslaunch exerciseX exerciseX.launch`):
 
 ```
 RLException: [`LAUNCH_NAME`.launch] is neither a launch file in package [`PACKAGE_NAME`] nor is [`PACKAGE_NAME`] a launch file name
@@ -126,7 +126,7 @@ The desktop environment likely went in idle mode for inactivity. Theoretically t
 ---
 
 
-### docker: error response from daemon: could not select device driver "" with capabilities: \[\[gpu\]\]
+### - docker: error response from daemon: could not select device driver "" with capabilities: \[\[gpu\]\]
 When running the simulation inside a container which was started with the flag `--gpus all`:
 
 ```
@@ -137,7 +137,7 @@ docker: error response from daemon: could not select device driver "" with capab
 ---
 ---
 
-### simulation is not running on GPU
+### - simulation is not running on GPU
 
 When the simulation starts, some logging information will be displayed in the terminal, including if the simulation is running on the GPU.
 If the simulation is not running on the GPU even though the container is running with the flag `--gpus all`:

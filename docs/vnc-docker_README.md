@@ -1,10 +1,14 @@
 # Docker environment for Duckietown class
 
-This repository contains the necessary files to run a Docker container on a Duckiebot that provides a complete desktop environment with ROS Noetic and other tools for the Duckietown class.
+This repository contains the necessary files to run a Docker container on a Duckiebot that provides a complete desktop environment with ROS Noetic and other tools for the Duckietown class. 
+
+The name of your Duckiebot (<DUCKIEBOT_NAME>) is on the label on top of your Duckiebot (and on the yellow box you have received with it). Every Duckiebot has its own specific name.
+
+Remember that we support running the Docker container on the Duckiebot platform only. We do not support running it on other platforms (e.g. your laptop).
 
 * [1) Desktop environment on the Duckiebot](#1-desktop-environment-on-the-duckiebot)
 	* [ 1.1) Access the desktop environment](#11-access-the-desktop-environment)
-		* [VNC Client (E.g. Remmina, RealVNC viewer)](#vnc-client-eg-remmina-realvnc-viewer)
+		* [VNC Client](#vnc-client)
 		* [Browser](#browser)
 * [2) Different ways to connect and develop on your Duckiebot](#2-different-ways-to-connect-and-develop-on-your-duckiebot)
 	* [ 2.1) VNC-like (complete desktop environment: recommended to visualize GUIs)](#21-vnc-like-complete-desktop-environment-recommended-to-visualize-guis)
@@ -12,11 +16,15 @@ This repository contains the necessary files to run a Docker container on a Duck
 		* [VS Code SSH without password](#vs-code-ssh-without-password)
 	* [ 2.3) Native SSH (terminal environment)](#23-native-ssh-terminal-environment)
 	* [ 2.4) Connecting tty directly with HDMI, keyboard, and mouse to Duckiebot (terminal environment)](#24-connecting-tty-directly-with-hdmi-keyboard-and-mouse-to-duckiebot-terminal-environment)
-* [3) Clone the `vnc-docker` and the `simulation` repositories](#3-clone-the-vnc-docker-and-the-simulation-repositories)
+* [3) Clone the `vnc-docker` and the `simulator` repositories on the Duckiebot](#3-clone-the-vnc-docker-and-the-simulator-repositories-on-the-duckiebot)
 * [4) Docker image and container](#4-docker-image-and-container)
 	* [ 4.1) Pull/Build the docker image](#41-pullbuild-the-docker-image)
 	* [ 4.2) Run the docker container](#42-run-the-docker-container)
 	* [ 4.3) Access the running docker container](#43-access-the-running-docker-container)
+		* [ 4.3.1) VNC-like](#431-vnc-like-complete-desktop-environment-recommended-to-visualize-guis)
+		* [ 4.3.2) VS Code SSH](#432-vs-code-ssh-code-editor-environment--terminal-environment)
+		* [ 4.3.3) Native SSH](#433-native-ssh-terminal-environment)
+		* [ 4.3.4) Connecting tty directly with HDMI, keyboard, and mouse to Duckiebot (terminal environment)](#434-connecting-tty-directly-with-hdmi-keyboard-and-mouse-to-duckiebot-terminal-environment)
 	* [ 4.4) Updates](#44-updates)
 	* [ 4.5) Other commands](#45-other-commands)
 * [5) Tools inside the `main-workspace` container](#5-tools-inside-the-main-workspace-container)
@@ -39,7 +47,7 @@ You can access from you laptop the desktop environment running on the Duckiebot 
 
 ***IMPORTANT***: **you need to be connected to the same network as the Duckiebot, using the same WiFi network or an Ethernet cable**. Read [next section](#important-you-need-to-be-connected-to-the-same-network-as-the-duckiebot-using-the-same-wifi-network-or-an-ethernet-cable).
 
-####  VNC Client (E.g. Remmina, RealVNC viewer)
+####  VNC Client
 Use a vnc client (Ubuntu comes by default with Remmina), connect to `<DUCKIEBOT_NAME>.local:5900` (with RealVNC viewer, just `<DUCKIEBOT_NAME>.local` is enough)
 
 **Click here if you cannot visualize the video below: [assets/media/realvnc-connect.mp4](../assets/media/realvnc-connect.mp4)**.
@@ -57,7 +65,7 @@ Open a browser and connect to `http://<DUCKIEBOT_NAME>.local:6080/vnc.html`. Not
 ##  2) Different ways to connect and develop on your Duckiebot
 
 #### ***IMPORTANT***: **you need to be connected to the same network as the Duckiebot, using the same WiFi network or an Ethernet cable**.
-To add new networks to the Duckiebot, follow the instructions in the [Duckietown Manual](https://docs.duckietown.com/daffy/opmanual-duckiebot/debugging_and_troubleshooting/network_config/index.html#add-wi-fi-networks-without-reinitializing-the-sd-card). A first WiFi network is already configured on the Duckiebot for the *autolab5* network (password: quackquack) of the shared Duckietown space in room ML K31, but you can add more WiFi networks. Otherwise, you can connect to the Duckiebot with an Ethernet cable.
+To add new networks to the Duckiebot, follow the instructions in the [Duckietown Manual](https://docs.duckietown.com/daffy/opmanual-duckiebot/debugging_and_troubleshooting/network_config/index.html#add-wi-fi-networks-without-reinitializing-the-sd-card). A first WiFi network is already configured on the Duckiebot for the *autolab5* network of the shared Duckietown space in room ML K31, but you can add more WiFi networks. Otherwise, you can connect to the Duckiebot with an Ethernet cable.
 
 ---
 
@@ -71,7 +79,7 @@ On your laptop, install VS Code and its extension [Remote Development extension]
 
 Then, press `Ctrl+Shift+P` and search for `>Remote SSH: Connect to Host...` (or click on the blue square icon `><` on the bottom-left corner of VS Code, then click from the pop-up list `Connect to Host`) and choose `<DUCKIEBOT_NAME>.local` (if required the password is `quackquack`). When the new VS Code window opens you are ready to go: VS Code is now connected to the Duckiebot and is displaying the files and folders on the Duckiebot.
 
-**Click here if you cannot visualize the video below: [assets/media/vscode-ssh.mp4](../assets/media/vscode-ssh.mp4)**.
+**Click here if you cannot visualize the video below: [assets/media/vscode-ssh.mp4](../assets/media/vscode-ssh.mp4)**. Note: at the end of the video, the path for the `vnc-docker` folder is an old one: the correct path is `/home/duckie/vnc-docker`.
 
 ![](../assets/media/vscode-ssh.mp4)
 
@@ -105,22 +113,28 @@ Attach monitor with the HDMI cable, keyboard, and mouse to the free available po
 login: `duckie`, password: `quackquack`
 
 
-## 3) Clone the `vnc-docker` and the `simulation` repositories
+## 3) Clone the `vnc-docker` and the `simulator` repositories on the Duckiebot
 
 **The following steps assumes you have succesfully connected to the Duckiebot**.
 
-**You first need to setup your GitHub account on the Duckiebot, and being a member of the GitHub [`ETHZ-DT-Class`](https://github.com/ETHZ-DT-Class) organization**.
+The `vnc-docker` (this repository) and the `simulator` repositories are already present on the Duckiebot, at `/home/duckie/vnc-docker` and `/home/duckie/vnc-docker/user_code_mount_dir/simulator`. If not, follow the instructions below.
+
+<details>
+
+<summary>Click to expand</summary>
+
 
 Clone the `vnc-docker` repository within [`/home/duckie/`](../../../../home/duckie/):
 ```
-git clone git@github.com:ETHZ-DT-Class/vnc-docker.git /home/duckie/vnc-docker
+git clone https://github.com/ETHZ-DT-Class/vnc-docker.git /home/duckie/vnc-docker
 ```
 
-Then, you clone the `simulation` repository within [`vnc-docker/user_coude_mount_dir/`](../user_code_mount_dir/):
+Then, you clone the `simulator` repository within [`/home/duckie/vnc-docker/user_coude_mount_dir/`](../user_code_mount_dir/):
 ```
-git clone git@github.com:ETHZ-DT-Class/simulator.git /home/duckie/vnc-docker/user_code_mount_dir/simulator
+git clone https://github.com/ETHZ-DT-Class/simulator.git /home/duckie/vnc-docker/user_code_mount_dir/simulator
 ```
 
+</details>
 
 ##  4) Docker image and container
 
@@ -145,7 +159,7 @@ To access the *running* docker container `main-workspace`:
 - if you are connected to the Duckiebot using VNC-like: the desktop environment you see is already inside the running container, you don't have to do anything.
 - if you are connected to the Duckiebot using VS Code SSH: you have two options:
 	- suggested: press `Ctrl+Shift+P` and search for `>Dev Containers: Attach to Running Container...` (or click on the same bottom-left blue icon used previously to *Connect to Host* (which now should contain `SSH: <DUCKIEBOT_NAME>.local`) and click from the pop-up list `Attach to Running Container`). Choose the container `main-worksapce`, and when the new VS Code window opens you are ready to go.
-	**Click here if you cannot visualize the video below: [assets/media/vscode-ssh-docker.mp4](../assets/media/vscode-ssh-docker.mp4)**.
+	**Click here if you cannot visualize the video below: [assets/media/vscode-ssh-docker.mp4](../assets/media/vscode-ssh-docker.mp4)**. Note: at the end of the video, the path for the `vnc-docker` folder is an old one: the correct path is `/home/duckie/vnc-docker`.
 
 	![](../assets/media/vscode-ssh-docker.mp4)
 
@@ -154,11 +168,11 @@ To access the *running* docker container `main-workspace`:
   
 If you encounter problems accessing (attaching) the container, check that the container is running with `make check-running`.
 
-***IMPORTANT*** The project/exercises are run inside the docker container. However, the actual project/exercise repositories will be stored outside the docker container, in the directory [`user_code_mount_dir/`](../user_code_mount_dir). This directory is mounted inside the docker container at `/code/catkin_ws/src/user_code/`. This means that whatever changes you make within [`user_code_mount_dir/`](../user_code_mount_dir) outside the docker container, it will be instantly reflected within the folder `/code/catkin_ws/src/user_code/` inside the docker container, and vice-versa.
+***IMPORTANT*** The project/exercises' ROS nodes are run inside the docker container. However, the actual project/exercise repositories will be stored outside the docker container, in the directory [`user_code_mount_dir/`](../user_code_mount_dir). This directory is mounted inside the docker container at `/code/catkin_ws/src/user_code/`. This means that whatever changes you make within [`user_code_mount_dir/`](../user_code_mount_dir) outside the docker container, it will be instantly reflected within the folder `/code/catkin_ws/src/user_code/` inside the docker container, and vice-versa.
 
 ###  4.4) Updates
 During the class, the docker image `dt-ros-noetic-vnc` could be updated with new features or bug fixes. If this is the case, we will ask you to update the image and to work with the new image only. To do so, you have two options:
-- run `make pull` to download the already built updated image from Docker HUB;
+- run `make pull` to download the already built updated image from Docker Hub;
 - update this `vnc-docker` repository with `git pull`, then run `make build` to build the updated image yourself.
 
 ***IMPORTANT***: when you pull or build a new version of the docker image, you need to **stop** and **remove** the current running container (which is using the old image) with `make stop` and `make rm-container`, then run a new container (which will use the new image) with `make run`. If in doubt, run `make rerun` which will stop and remove the current container and run a new container.
@@ -182,17 +196,21 @@ Apart from the already mentioned make commands, other useful commands to manage 
 
 ##  5) Tools inside the `main-workspace` container
 ###  5.1) Simulator
-A custom simulation environment for this class is present at [user_code_mount_dir/simulator/](../user_code_mount_dir/simulator/) (you need to clone it, see [3) Clone the `vnc-docker` and the `simulation` repositories](#3-clone-the-vnc-docker-and-the-simulation-repositories)). Since the [user_code_mount_dir/](../user_code_mount_dir/) is mounted on the container, the simulator is available to be run inside it. The simulator is a standard ROS package. Run the simulator node with the default config parameters with `roslaunch simulator simulator.launch`. You can visualize the simulation (with the simulated sensor data) with RQT, or partially with Rviz. 
+A custom simulation environment for this class is present at [user_code_mount_dir/simulator/](../user_code_mount_dir/simulator/) (if not, you need to clone it, see [3) Clone the `vnc-docker` and the `simulator` repositories on the Duckiebot](#3-clone-the-vnc-docker-and-the-simulator-repositories-on-the-duckiebot)). Since the [user_code_mount_dir/](../user_code_mount_dir/) is mounted on the container, the simulator is available to be run inside it. The simulator is a standard ROS package. Run the simulator node with the default config parameters with `roslaunch simulator simulator.launch`. You can visualize the simulation (with the simulated sensor data) with RQT, or partially with Rviz. 
 
 **While developing the exercises, if you are required to work with the simulator you will find in the exercise's README the instructions on how to run the simulator with the correct config parameters for that specific exercise**. For extra, more detailed and "low-level" information, check the [Simulation_README.md](./Simulation_README.md) (but you **don't** need to read it for the development of the exercises).
 
 #### Updates
 
-During the class, the simulator could be updated with new features or bug fixes. If this is the case, we will ask you to update the git repository of the simulator and to work with the new version of the simulator only. To do so, you have to `git pull` while being inside the simulator folder. Then you may run `catkin build` inside the docker container to build the updated exercise package.
+During the class, the simulator could be updated with new feature or bug fixes. If this is the case, we will ask you to update the git repository of the simulator and to work with the new version of the simulator only. To do so, you have to `git pull` while being inside the simulator folder. Then you may run `catkin build` inside the docker container to build the updated simulator package.
 
 You ***DO NOT*** need to stop and remove the current running container when updating the simulator repository, or to pull/build a new version of the docker image. You can continue to work with the same running container. You just have to update the git repository of the simulator.
 
-We will update on Moodle the versioning number of the simulator you should use, to help you confirm that you have correctly update it. To check this, simply run `make show-versioning` *outside* the container, or manually check the *version* tag inside the [`package.xml`](../user_code_mount_dir/simulator/package.xml) file of the simulator repository.
+We will update on Moodle the version number of the simulator you should use, to help you confirm that you have correctly update it. To check this, simply run `make show-versioning` *outside* the container, or manually check the *version* tag inside the `package.xml` file of the simulator repository.
+
+**IMPORTANT** ROS packages have a version with the format *X.Y.Z* ([semantic versioning](https://semver.org/)). For this class, the version will only change in its X and Y values, with the following meaning:
+- increase in X value (major update): we updated the code in some way, or anyway there is an important update, you **must** update the package. 
+- increase in Y value (minor upddate): we updated the instructions/documentation only (comments in code, or READMEs, ...), you don't have to update the package (but is highly recommended)
 
 ### 5.2) RQT
 RQT is a ROS tool that provides a GUI plugin interface for ROS. You can use RQT to visualize and interact with ROS nodes, topics, services, and parameters through a modular and customizable interface. It helps in monitoring and debugging ROS systems by offering a range of built-in plugins.
@@ -219,6 +237,8 @@ RViz is already installed in the `main-workspace` container. You can run it with
 For more information about RViz, check the [official RViz wiki](https://wiki.ros.org/rviz).
 
 ### 5.4) Code Editor
+
+***IMPORTANT*** **When you are coding on VS Code (i.e. when you are actively using it such as writing code, and not just if the application is open) while connected SSH to the Duckiebot by the Remote Development extension, the CPU load of the application can be as high as 150%. It is recommended to not code anything on VS Code while for example running your ROS nodes of the exercises, since the high CPU load could slow down their execution and affect the results.**
 
 The recommended workflow is to use the VS Code SSH extension to connect to the Duckiebot, to use VS Code as the code editor to develop the project/exercises. This is explained in [2.2) VS Code SSH](#22-vs-code-ssh-code-editor-environment--terminal-environment-recommended-to-develop-the-code) and [4.3) Access the running docker container](#43-access-the-running-docker-container).
 

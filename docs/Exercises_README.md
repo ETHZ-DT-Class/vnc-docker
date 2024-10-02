@@ -7,7 +7,10 @@ The exercises are run inside the `main-workspace` container. However, the actual
 ##  Clone the exercise repositories
 You first need to setup your GitHub account on the Duckiebot, and being a member of the GitHub [`ETHZ-DT-Class`](https://github.com/ETHZ-DT-Class) organization.
 
-Then, clone the required exercise repository inside the [`user_code_mount_dir/`](../user_code_mount_dir) folder of this `vnc-docker` repository. 
+Then, clone the required exercise repository inside the [`user_code_mount_dir/`](../user_code_mount_dir) folder of this `vnc-docker` repository. **It is highly suggested to clone the repositories *outside* the docker container within the mentioned folder, and not directly inside the container, to avoid permission issues**.
+
+You may want to [setup a SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) on the Duckiebot to avoid typing your GitHub credentials every time you clone a repository.
+
 ```
 git clone git@github.com:ETHZ-DT-Class/exerciseX.git  /home/duckie/vnc-docker/user_code_mount_dir/exerciseX
 ```

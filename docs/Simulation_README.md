@@ -9,10 +9,8 @@ For the development of the exercises, you **don't** need to read this README. Th
 ### Clone the repository
 If the simulator repository is not already present at [user_code_mount_dir/simulator/](../user_code_mount_dir/simulator/), clone the repository.
 
-You first need to setup your GitHub account on the Duckiebot, and being a member of the GitHub [`ETHZ-DT-Class`](https://github.com/ETHZ-DT-Class) organization.
-
 ```
-git clone git@github.com:ETHZ-DT-Class/simulator.git /home/duckie/vnc-docker/user_code_mount_dir/simulator
+git clone https://github.com/ETHZ-DT-Class/simulator.git /home/duckie/vnc-docker/user_code_mount_dir/simulator
 ```
 ### Run
 
