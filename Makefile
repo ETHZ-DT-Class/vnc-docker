@@ -19,6 +19,8 @@ endif
 
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
+REPO_VERSION=$(shell cat $(ROOT_DIR)/assets/VERSION)
+
 # Detect the architecture of the machine
 ARCH_TMP := $(shell uname -m)
 ifeq ($(ARCH_TMP),x86_64)
@@ -58,7 +60,7 @@ pull:
 build:
 	@DOCKER_BUILDKIT=1 docker build -t $(FULL_IMAGE) --progress auto \
 	--build-arg ON_JETSON=$(ON_JETSON) --build-arg ARCH=$(ARCH) \
-	--build-arg DT_IMAGE_VERSION=$(shell cat $(ROOT_DIR)/assets/VERSION) .
+	--build-arg DT_IMAGE_VERSION=$(REPO_VERSION) .
 
 #: Stop the running main container
 stop:
@@ -119,15 +121,25 @@ ifeq ($(ON_JETSON),false)
 DOCKER_CMD:=bash -c "while :; do sleep 10000; done;"
 endif
 
-IMAGE_VERSION=$(shell \
-	docker inspect -f '{{ index .Config.Labels "dt_image_version" }}' $(FULL_IMAGE) 2>/dev/null || \
-	echo "latest")
+IMAGE_VERSION=$(shell docker inspect -f '{{ index .Config.Labels "dt_image_version" }}' $(CONTAINER_NAME) 2>/dev/null || echo "? (container not found or still creating)")
+
+define warn-mismatch
+	@if [ "$(IMAGE_VERSION)" = " ? (container not found or still creating)" ]; then \
+		.; \
+	elif [ "$(REPO_VERSION)" != "$(IMAGE_VERSION)" ]; then \
+		echo "#$(shell tput setaf 3) [WARNING] Version mismatch between vnc-docker repository and docker image. Consider either:$(shell tput sgr0)"; \
+		echo "#$(shell tput setaf 3)           1) updating the image: rebuild (->make build) or pull (->make pull) the image (and then ->make rerun), $(shell tput sgr0)"; \
+		echo "#$(shell tput setaf 3)        or 2) updating the repo : pull the vnc-docker repository (->git pull).$(shell tput sgr0)"; \
+		echo "#"; \
+	fi
+endef
 
 #: Show params used in this Makefile
 show-params:
 	#
 	# ---------- Makefile params (BEGINNING) ----------
 	#
+	#  REPO_VERSION:   $(REPO_VERSION)
 	#  CONTAINER_NAME: $(CONTAINER_NAME)
 	#  FULL_IMAGE:     $(FULL_IMAGE)
 	#  IMAGE_VERSION:  $(IMAGE_VERSION)
@@ -140,14 +152,17 @@ show-params:
 	#
 	# ---------- Makefile params (END) ----------
 	#
-
+	@$(call warn-mismatch)
+	
 #: Show versioning information
 show-versioning:
 	#
 	# ---------- Versioning information ----------
 	#
-	#  Docker image: $(IMAGE_VERSION)
+	#  vnc-docker:   $(REPO_VERSION)
+	#  docker image: $(IMAGE_VERSION)
 	#
+	@$(call warn-mismatch)
 	#  User code packages:
 	@for pkg in $$(find $(ROOT_DIR)/user_code_mount_dir/ -name package.xml | sort); do \
 		echo "#    $$(grep -oPm1 "(?<=<name>)[^<]+" $$pkg;)": "$$(grep -oPm1 "(?<=<version>)[^<]+" $$pkg;)"; \
@@ -163,7 +178,7 @@ run: show-params
 	docker run $(DOCKER_RUN_OPTIONS) $(FULL_IMAGE) $(DOCKER_CMD)) || \
 	(docker ps -a --filter "name=$(CONTAINER_NAME)" --filter "status=running" --format "{{.Names}}" | \
 	grep -q $(CONTAINER_NAME) && echo "Container $(CONTAINER_NAME) was already running. Stop it first with 'make stop', \
-	and remove it with 'make rm-container' to be able to start a fresh new container.")
+	and remove it with 'make rm-container' to be able to start a fresh new container (or run 'make rerun').")
 
 #: Attach a shell to the running container
 exec:
