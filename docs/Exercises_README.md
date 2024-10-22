@@ -7,13 +7,15 @@ The exercises are run inside the `main-workspace` container. However, the actual
 ##  Fork and Clone the exercise repositories
 
 ### Fork
-You first need to setup your GitHub account on the Duckiebot, and being a member of the GitHub [`ETHZ-DT-Class`](https://github.com/ETHZ-DT-Class) organization.
+1) You first need to setup your GitHub account on the Duckiebot, and being a member of the GitHub [`ETHZ-DT-Class`](https://github.com/ETHZ-DT-Class) organization.
 
-Then, open the GitHub [`ETHZ-DT-Class`](https://github.com/ETHZ-DT-Class) organization on a browser. In the [`repositories`](https://github.com/orgs/ETHZ-DT-Class/repositories) page you will find the repositories for the available exercises. Click on the repository of the `exerciseX` you want to work on, and fork it using the following configuration: `Owner: ETHZ-DT-Class`, `Repository name: <ETH_NAME>-exerciseX` (for example, if your ETH username is *jdoe* given your ETH email is *jdoe</span>@student.ethz.ch*, the `Repository name` will be `jdoe-exercise3` for exercise3). See the image below for a visual example:
+2) Then, open the GitHub [`ETHZ-DT-Class`](https://github.com/ETHZ-DT-Class) organization on a browser. In the [`repositories`](https://github.com/orgs/ETHZ-DT-Class/repositories) page you will find the repositories for the available exercises. Click on the repository of the `exerciseX` you want to work on, and fork it using the following configuration: `Owner: ETHZ-DT-Class`, `Repository name: <ETH_NAME>-exerciseX` (for example, if your ETH username is *jdoe* given your ETH email is *jdoe</span>@student.ethz.ch*, the `Repository name` will be `jdoe-exercise3` for exercise3). See the image below for a visual example:
 
 &nbsp; &nbsp;
 <img src="../assets/media/fork-exercise.png">
 &nbsp; &nbsp;
+
+3) Remember to remove the `Students` team from the `Manage Access`/`Direct access` setting of your fork, which you can find at `https://github.com/ETHZ-DT-Class/<ETH_NAME>-exercise<X>/settings/access`. If you don't, everyone in the `Students` team (all of your classmates) will be able to see your fork.
 
 **Do not create any other fork for an exercise than the one described. Moreover, pay attention that you MUST fork the repository with *ETHZ-DT-Class* as *Owner* and your ETH username in the *Repository name*!, since this is essential for the grading process.**
 

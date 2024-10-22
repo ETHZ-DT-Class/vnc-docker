@@ -157,16 +157,21 @@ show-params:
 #: Show versioning information
 show-versioning:
 	#
-	# ---------- Versioning information ----------
+	# ---------- Versioning information (on your machine) ----------
 	#
-	#  vnc-docker:   $(REPO_VERSION)
-	#  docker image: $(IMAGE_VERSION)
+	#  vnc-docker:    $(REPO_VERSION)
+	#  docker image:  $(IMAGE_VERSION)
 	#
 	@$(call warn-mismatch)
 	#  User code packages:
 	@for pkg in $$(find $(ROOT_DIR)/user_code_mount_dir/ -name package.xml | sort); do \
 		echo "#    $$(grep -oPm1 "(?<=<name>)[^<]+" $$pkg;)": "$$(grep -oPm1 "(?<=<version>)[^<]+" $$pkg;)"; \
 	done
+	#
+	# ----------------------------------------------------------------
+	#
+	# To check if your environment is up-to-date, check if the above version info match the ones in the 'Versioning' post on Moodle.
+	# https://moodle-app2.let.ethz.ch/mod/forum/discuss.php?d=152941
 	#
 
 #: Run the container
